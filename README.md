@@ -25,7 +25,7 @@ This presentation showcases `modeltime.gluonts` (an R package used for deep lear
 
 ## Saturn Cloud | NVIDIA GPU Workspace
 
-Saturn Cloud gives enables us to run data science code across multiple machines or with GPUs, then deploy to dashboards, APIs, and scheduled jobs. We used the GPU capability in this lab. 
+[Saturn Cloud](https://www.saturncloud.io/) enables us to run data science code across multiple machines or with GPUs, then deploy to dashboards, APIs, and scheduled jobs. We used the GPU capability in this lab. 
 
 ![GPU Workspace](img/workspace_settings_gpu.jpg)
 
