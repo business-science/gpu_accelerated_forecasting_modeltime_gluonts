@@ -10,7 +10,7 @@ This presentation showcases `modeltime.gluonts` (an R package used for deep lear
 
 ## Saturn Cloud | NVIDIA GPU Workspace
 
-![GPU Workspace]()
+![GPU Workspace](workspace_settings_gpu.jpg)
 
 - We leveraged the [SaturnCloud Platform](https://www.saturncloud.io/) to create a GPU Workspace and Modeltime GluonTS Environment 
 - The environment uses MXNET CUDA Backend enabling GluonTS to leverage GPUs and greatly speed-up training
