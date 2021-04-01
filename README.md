@@ -2,6 +2,8 @@
 
 ![Saturn Cloud GPU Multi-Forecast](img/saturn_cloud_gpu_multiforecast.jpg)
 
+![Event Sponsors](img/event_sponsors.jpg)
+
 This is a short demonstration of __GPU-Accelerated Deep Learning for Time Series__ that was part of the presentation, _"The Future of Time Series | Rise of the High-Performance Forecasting System"_. Video and all supporting contents are provided as part of [Learning Labs PRO, Lab 53](https://university.business-science.io/p/learning-labs-pro).
 
 - 7 forecasts (Multi-Forecast) were created using a single GluonTS Model
