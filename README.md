@@ -29,20 +29,20 @@ This presentation showcases `modeltime.gluonts` (an R package used for deep lear
 
 [Saturn Cloud](https://www.saturncloud.io/) enables us to run data science code across multiple machines or with GPUs, then deploy to dashboards, APIs, and scheduled jobs. We used the GPU capability in this lab. 
 
-![GPU Workspace](img/workspace_settings_gpu.jpg)
+![GPU Workspace](img/workspace_settings.jpg)
 
 ### Instructions:
 
 - Go to the [SaturnCloud Platform](https://www.saturncloud.io/) to create a GPU Workspace and Modeltime GluonTS Environment 
 - Click "Create Project"
 - Select the GPU type from the Hardware
-- Select the Saturn-R-Modeltime-GPU Image 
+- Select the Saturn-R-Modeltime-GPU Image (514354729342.dkr.ecr.us-east-2.amazonaws.com/saturn-r-modeltime-gpu:[DATE])
     - Pre-built with Modeltime, R Kernel, and supporting R and Python packages
     - The environment uses MXNET CUDA Backend enabling GluonTS to leverage GPUs and greatly speed-up training
     - The result is training times 2X to 5X faster than on a 12-Core Laptop
 - Click "Create" - This creates a project
 - Once the project is ready, upload the `modeltime_test.ipynb` Jupyter Notebook and run the code. 
-- NOTE: Make sure the python path points to the correct python location on the system. 
+- NOTE: Make sure the python path in the Python Notebook points to the correct python location on the system. We ran the `modeltime_test.ipynb` at the base directory (not the project directory).
 
 
 ## Thanks to our Event Sponsors
