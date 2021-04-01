@@ -1,0 +1,166 @@
+---
+title: "GPU Accelerated Deep Learning for Time Series Forecasting | Learning Lab 53"
+subtitle: "Saturn Cloud + Modeltime GluonTS using NVIDIA GPUs"
+author: "Business Science"
+date: "4/1/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+    echo    = TRUE,
+    warning = FALSE,
+    message = FALSE
+)
+```
+
+This is a short demonstration that showcases the capability of combining Modeltime GluonTS with NVIDIA GPUs using the Saturn Cloud Platform.
+
+# Local Installation
+
+Please follow the instructions to set up [Modeltime GluonTS here](https://business-science.github.io/modeltime.gluonts/articles/managing-envs.html). 
+
+# Libraries
+
+```{r}
+# Modeling
+library(modeltime)
+library(tidymodels)
+
+# GluonTS Deep Learning
+library(modeltime.gluonts)
+
+# Core + Time Series
+library(tidyverse)
+library(timetk)
+```
+
+```{r}
+# Check GluonTS is activated
+is_gluonts_activated()
+```
+
+## Data
+
+```{r}
+# Load the walmart dataset from timetk
+
+head(walmart_sales_weekly)
+```
+
+## Split the Series into Train/Test
+
+```{r}
+FORECAST_HORIZON <- 28
+
+splits <- walmart_sales_weekly %>%
+    select(id, Date, Weekly_Sales) %>%
+    time_series_split(assess = FORECAST_HORIZON, cumulative = TRUE)
+
+splits
+```
+
+```{r}
+# Visualize the split
+splits %>%
+    tk_time_series_cv_plan() %>%
+    plot_time_series_cv_plan(.date_var = Date, .value = Weekly_Sales, .interactive = FALSE)
+```
+## Training
+
+```{r}
+t0 <- Sys.time()
+model_fit_deepar <- deep_ar(
+  id                    = "id",
+  freq                  = "W",
+  prediction_length     = 28,
+  lookback_length       = 36,
+  epochs                = 3, 
+  num_batches_per_epoch = 50,
+  learn_rate            = 0.01,
+  num_layers            = 2,
+  num_cells             = 80,
+  dropout               = 0.10,
+  scale                 = TRUE      
+) %>%
+  set_engine("gluonts_deepar") %>%
+  fit(Weekly_Sales ~ Date + id, training(splits))
+
+t1 <- Sys.time()
+t1-t0
+```
+
+```{r}
+model_fit_deepar
+```
+
+```{r}
+calibration_tbl <- modeltime_table(
+    model_fit_deepar
+) %>%
+    modeltime_calibrate(testing(splits)) 
+
+calibration_tbl %>% modeltime_accuracy()
+```
+
+## Forecast the Test Set
+
+```{r}
+calibration_tbl %>%
+    modeltime_forecast(
+        new_data    = testing(splits), 
+        actual_data = walmart_sales_weekly,
+        keep_data   = TRUE
+    ) %>%
+    group_by(id) %>%
+    plot_modeltime_forecast(
+        .facet_ncol = 3, 
+        .interactive = F, 
+        .conf_interval_show = F
+    )
+```
+
+## Refit and Forecast the Future
+
+```{r}
+# Make the Future Dataset to be Forecast
+future_data_tbl <- walmart_sales_weekly %>%
+    select(id, Date, Weekly_Sales) %>%
+    group_by(id) %>%
+    future_frame(
+        `.date_var` = Date, 
+        `.length_out` = FORECAST_HORIZON, 
+        `.bind_data` = TRUE
+    ) %>%
+    ungroup() %>%
+    filter(is.na(Weekly_Sales))
+
+future_data_tbl %>% head()
+```
+
+```{r}
+# Refit the model on the full set of data
+t0 <- Sys.time()
+
+refit_tbl <- calibration_tbl %>%
+    modeltime_refit(data = bind_rows(training(splits), testing(splits)))
+
+t1 <- Sys.time()
+t1-t0
+```
+
+```{r}
+refit_tbl %>%
+    modeltime_forecast(
+        new_data    = future_data_tbl, 
+        actual_data = walmart_sales_weekly,
+        keep_data   = TRUE
+    ) %>%
+    group_by(id) %>%
+    plot_modeltime_forecast(
+        .facet_ncol         = 3, 
+        .interactive        = F, 
+        .conf_interval_show = F
+    )
+```
+
