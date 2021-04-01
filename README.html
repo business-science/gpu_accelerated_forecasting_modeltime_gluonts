@@ -213,17 +213,27 @@ pre code {
 <h3>Instructions:</h3>
 <ul>
 <li>Go to the <a href="https://www.saturncloud.io/">SaturnCloud Platform</a> to create a GPU Workspace and Modeltime GluonTS Environment</li>
-<li>Click “Create Project”</li>
-<li>Select the GPU type from the Hardware</li>
-<li>Select the Saturn-R-Modeltime-GPU Image (514354729342.dkr.ecr.us-east-2.amazonaws.com/saturn-r-modeltime-gpu:[DATE])
+<li>Click “Create Custom Project”</li>
+<li>Select the “T4 GPU” type from the Hardware</li>
+<li>Select the Saturn-R-Modeltime-GPU Image (514354729342.dkr.ecr.us-east-2.amazonaws.com/saturn-r-modeltime-gpu:2021.03.16.19.36)
 <ul>
 <li>Pre-built with Modeltime, R Kernel, and supporting R and Python packages</li>
 <li>The environment uses MXNET CUDA Backend enabling GluonTS to leverage GPUs and greatly speed-up training</li>
 <li>The result is training times 2X to 5X faster than on a 12-Core Laptop</li>
 </ul></li>
-<li>Click “Create” - This creates a project</li>
-<li>Once the project is ready, upload the <code>modeltime_test.ipynb</code> Jupyter Notebook and run the code.</li>
-<li>NOTE: Make sure the python path in the Python Notebook points to the correct python location on the system. We ran the <code>modeltime_test.ipynb</code> at the base directory (not the project directory).</li>
+<li>Open the “Advanced Settings” and make the following changes:
+<ul>
+<li>Copy and paste this command into the “Startup Script” area. These lines let Jupyter Know to use R (and include a fix to a minor package issue)</li>
+</ul></li>
+</ul>
+<pre><code>Rscript -e &quot;IRkernel::installspec(user = TRUE)&quot;
+sudo Rscript -e &quot;remove.packages(&#39;farver&#39;)&quot;
+sudo Rscript -e &quot;install.packages(&#39;farver&#39;, repos = &#39;https://cran.r-project.org&#39;)&quot;</code></pre>
+<ul>
+<li>Change the “Working Directory” to: <code>/home/jovyan/</code></li>
+<li>Click “Create” - This creates a project. Start the Jupyter Server with the green triangle button (the first time you do this it’ll take a few minutes).</li>
+<li>Once the Jupyter Server is online and the Jupyter Lab button is active, click it to open Jupyter Lab.</li>
+<li>Upload the <code>modeltime_test.ipynb</code> Jupyter Notebook and run the code.</li>
 </ul>
 </div>
 </div>
