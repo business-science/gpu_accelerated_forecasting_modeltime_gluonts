@@ -25,7 +25,7 @@ This presentation showcases `modeltime.gluonts` (an R package used for deep lear
 
 ![Modeltime Ecosystem](img/modeltime_ecosystem.jpg)
 
-## Saturn Cloud | NVIDIA GPU Workspace
+## Workspace Setup: Saturn Cloud | NVIDIA GPU 
 
 [Saturn Cloud](https://www.saturncloud.io/) enables us to run data science code across multiple machines or with GPUs, then deploy to dashboards, APIs, and scheduled jobs. We used the GPU capability in this lab. 
 
@@ -35,4 +35,8 @@ This presentation showcases `modeltime.gluonts` (an R package used for deep lear
 - The environment uses MXNET CUDA Backend enabling GluonTS to leverage GPUs and greatly speed-up training
 - The result is training times 2X to 5X faster than on a 12-Core Laptop
 
+## Thanks to our Event Sponsors
 
+This event was sponsored by [Saturn Cloud](https://www.saturncloud.io/), [NVIDIA](https://www.nvidia.com/), and [Business Science](https://www.business-science.io/).
+
+![Event Sponsors](img/event_sponsors.jpg)
